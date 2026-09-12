@@ -31,6 +31,13 @@ class MobileController extends Controller
         return $this->session($request);
     }
 
+    public function recovery(Request $request): JsonResponse
+    {
+        app(AccountController::class)->sendReset($request);
+
+        return response()->json(['message' => $request->session()->get('success')])->header('Cache-Control', 'no-store');
+    }
+
     public function logout(Request $request): JsonResponse
     {
         app(AuthController::class)->logout($request);
@@ -81,6 +88,9 @@ class MobileController extends Controller
         abort_if($request->user()->is_superadmin, 403);
         $workspace = app(WorkspaceController::class);
         match (true) {
+            $module === 'account-password' && ! $id => app(AccountController::class)->password($request),
+            $module === 'account-sessions' && ! $id => app(AccountController::class)->revokeSessions($request),
+            $module === 'account-verification' && ! $id => app(AccountController::class)->verification($request),
             $module === 'projects' && ! $id => $workspace->createProject($request),
             in_array($module, ['workers', 'gate', 'activities', 'diary'], true) && ! $id => $workspace->store($request, $module),
             $module === 'activities' && $id !== null => $workspace->updateActivity($request, $id),
@@ -97,6 +107,6 @@ class MobileController extends Controller
             default => abort(404),
         };
 
-        return response()->json(['message' => $request->session()->get('success', 'Saved.')])->header('Cache-Control', 'no-store');
+        return response()->json(['message' => $request->session()->get('success', 'Saved.'), 'csrf_token' => csrf_token()])->header('Cache-Control', 'no-store');
     }
 }

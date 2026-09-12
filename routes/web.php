@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InstructionController;
+use App\Http\Controllers\MobileController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TeamController;
@@ -87,14 +88,15 @@ Route::middleware('auth')->group(function () {
 
 // Native clients use encrypted Laravel session cookies and CSRF protection.
 Route::prefix('api/v1')->middleware('throttle:120,1')->group(function () {
-    Route::get('/session', [\App\Http\Controllers\MobileController::class, 'session']);
+    Route::get('/session', [MobileController::class, 'session']);
     Route::middleware('guest')->group(function () {
-        Route::post('/login', [\App\Http\Controllers\MobileController::class, 'login'])->middleware('throttle:6,1');
-        Route::post('/register', [\App\Http\Controllers\MobileController::class, 'register'])->middleware('throttle:5,1');
+        Route::post('/forgot-password', [MobileController::class, 'recovery'])->middleware('throttle:5,1');
+        Route::post('/login', [MobileController::class, 'login'])->middleware('throttle:6,1');
+        Route::post('/register', [MobileController::class, 'register'])->middleware('throttle:5,1');
     });
     Route::middleware('auth')->group(function () {
-        Route::post('/logout', [\App\Http\Controllers\MobileController::class, 'logout']);
-        Route::get('/{module}/{id?}', [\App\Http\Controllers\MobileController::class, 'read'])->whereNumber('id');
-        Route::post('/{module}/{id?}/{action?}', [\App\Http\Controllers\MobileController::class, 'write'])->whereNumber('id');
+        Route::post('/logout', [MobileController::class, 'logout']);
+        Route::get('/{module}/{id?}', [MobileController::class, 'read'])->whereNumber('id');
+        Route::post('/{module}/{id?}/{action?}', [MobileController::class, 'write'])->whereNumber('id');
     });
 });
