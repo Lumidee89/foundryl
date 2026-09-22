@@ -13,8 +13,6 @@ export default function Audit({
             actor_user_id: number;
             project_id: number | null;
             created_at: string;
-            previous_state: string | null;
-            new_state: string | null;
         }[];
         prev_page_url: string | null;
         next_page_url: string | null;
@@ -37,7 +35,6 @@ export default function Audit({
                                 <th>Actor</th>
                                 <th>Project</th>
                                 <th>Record</th>
-                                <th>Change</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,29 +50,6 @@ export default function Audit({
                                     </td>
                                     <td>
                                         {e.entity_type} #{e.entity_id}
-                                    </td>
-                                    <td>
-                                        <details>
-                                            <summary>View details</summary>
-                                            <pre className="audit-state">
-                                                {JSON.stringify(
-                                                    {
-                                                        before: e.previous_state
-                                                            ? JSON.parse(
-                                                                  e.previous_state,
-                                                              )
-                                                            : null,
-                                                        after: e.new_state
-                                                            ? JSON.parse(
-                                                                  e.new_state,
-                                                              )
-                                                            : null,
-                                                    },
-                                                    null,
-                                                    2,
-                                                )}
-                                            </pre>
-                                        </details>
                                     </td>
                                 </tr>
                             ))}

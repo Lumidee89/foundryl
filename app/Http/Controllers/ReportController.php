@@ -61,6 +61,6 @@ class ReportController extends Controller
         $this->workspace->authorize('audit.view');
         $organization = $this->workspace->organization()->id;
 
-        return Inertia::render('Audit', ['events' => DB::table('audit_logs')->where('organization_id', $organization)->where(fn ($query) => $query->whereNull('project_id')->orWhereIn('project_id', $this->workspace->projects()->select('id')))->orderByDesc('id')->paginate(30), 'projects' => $this->workspace->projects()->get()]);
+        return Inertia::render('Audit', ['events' => DB::table('audit_logs')->where('organization_id', $organization)->where(fn ($query) => $query->whereNull('project_id')->orWhereIn('project_id', $this->workspace->projects()->select('id')))->orderByDesc('id')->paginate(30, ['id', 'action', 'entity_type', 'entity_id', 'actor_user_id', 'project_id', 'created_at']), 'projects' => $this->workspace->projects()->get()]);
     }
 }

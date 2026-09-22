@@ -1759,13 +1759,7 @@ tbody tr:nth-child(even) {
 .report-note {
     font-size: 11px;
 }
-.audit-state {
-    white-space: pre-wrap;
-    max-width: 400px;
-    max-height: 220px;
-    overflow: auto;
-    font-size: 10px;
-}
+
 .recovery-link {
     display: inline-flex;
 }
@@ -1783,4 +1777,66 @@ tbody tr:nth-child(even) {
     .row-actions {
         gap: 5px;
     }
+}
+
+
+/* Cards own their outer spacing; sections share the same inner edge. */
+.panel {
+    --panel-inset: clamp(20px, 2.2vw, 30px);
+    padding: var(--panel-inset);
+}
+.panel > .panel-heading {
+    padding: 0 0 18px;
+    flex-wrap: wrap;
+}
+.panel > form,
+.panel > .inline-form {
+    padding: 0;
+}
+.panel > .panel-heading + form,
+.panel > .panel-heading + .inline-form {
+    padding-top: 20px;
+}
+.panel > :is(h1, h2, h3):first-child {
+    margin-top: 0;
+}
+.panel > h2 {
+    margin-bottom: 18px;
+    line-height: 1.4;
+}
+.panel > p {
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+.panel > small {
+    display: block;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+.panel > :last-child {
+    margin-bottom: 0;
+}
+.panel > :is(.timeline, .project-chart, .direction, .diary-note, .notification-row, .project-row, .empty, .panel-bottom-link) {
+    padding-left: 0;
+    padding-right: 0;
+}
+.panel > .table-scroll tr > :first-child {
+    padding-left: 0;
+}
+.panel > .table-scroll tr > :last-child {
+    padding-right: 0;
+}
+.form-grid > *,
+.report-filters > *,
+.list-toolbar > * {
+    min-width: 0;
+}
+.list-toolbar {
+    gap: 16px;
+    flex-wrap: wrap;
+}
+@media (max-width: 650px) {
+    .panel { --panel-inset: 20px; }
+    .panel > .panel-heading { gap: 12px; }
+    .notification-row { gap: 14px; }
 }
